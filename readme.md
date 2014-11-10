@@ -49,5 +49,7 @@ Check out [node-pushserver](https://www.npmjs.org/package/node-pushserver) to ma
 sample node/express service which can be used to subscribe a user and token for push notifications. You can then send push notifications
 from your web browser easily simply using their UI as shown below. 
 
-
 ![](screenshots-blog/push-server.png) 
+
+Change this line to match your own setup:
+$http.post('http://192.168.1.5:8000/subscribe', JSON.stringify(user)

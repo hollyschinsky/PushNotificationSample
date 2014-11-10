@@ -1,7 +1,7 @@
 /**
  * Created by hollyschinsky on 11/4/14.
  */
-app.controller('AppCtrl', function($scope, $cordovaPush, $cordovaDialogs, ionPlatform, $http) {
+app.controller('AppCtrl', function($scope, $cordovaPush, $cordovaDialogs, $cordovaMedia, ionPlatform, $http) {
     // See ionPlatform factory in services.js for details
     ionPlatform.ready.then(function(device){
         console.log("DEVICE READY!")
@@ -20,7 +20,7 @@ app.controller('AppCtrl', function($scope, $cordovaPush, $cordovaDialogs, ionPla
              console.log("Register success " + result);
              $scope.regId = result;
              var user = {
-                 user: 'user'+Math.floor((Math.random()*10000000)+1),
+                 user: 'user'+Math.floor((Math.random()*10000000)+1), //generate a random userid
                  type: 'ios',
                  token: result
              }
@@ -56,17 +56,11 @@ app.controller('AppCtrl', function($scope, $cordovaPush, $cordovaDialogs, ionPla
 
         // The app was already open but we'll still show the alert and sound the tone received this way...
         if (notification.foreground=="1") {
+            // Play custom audio if a sound specified
             if (notification.sound) {
-                console.log("Sound " + notification.sound);
-                var beep = new Media(notification.sound,
-                    // success callback
-                    function () { console.log("Audio Success"); },
-                    // error callback
-                    function (err) { console.log("Audio Error: " + err); }
-                );
-
-                // Play custom audio if a sound specified
-                beep.play();
+                console.log("Sound file " + notification.sound);
+                var mediaSrc = $cordovaMedia.newMedia(notification.sound);
+                mediaSrc.promise.then($cordovaMedia.play(mediaSrc.media));
             }
 
             if (notification.body && notification.messageFrom) {
