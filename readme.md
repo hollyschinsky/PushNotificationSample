@@ -25,8 +25,8 @@ Install the following plugins:
 - console
 - device
 - dialogs
-- file
 - media
+- file
 
 
         $ ionic plugin add org.apache.cordova.console
