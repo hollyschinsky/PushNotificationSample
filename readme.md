@@ -30,6 +30,8 @@ Install the following plugins:
  
 
 
+
+
         $ ionic plugin add org.apache.cordova.console
         $ ionic plugin add org.apache.cordova.device
         $ ionic plugin add org.apache.cordova.dialogs    
