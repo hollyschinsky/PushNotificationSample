@@ -2,17 +2,17 @@
  * Created by hollyschinsky on 11/4/14.
  */
 app.controller('AppCtrl', function($scope, $cordovaPush, $cordovaDialogs, ionPlatform, $http) {
-    var iosConfig = {
-        "badge": "true",
-        "sound": "true",
-        "alert": "true"
-    };
-
     // See ionPlatform factory in services.js for details
     ionPlatform.ready.then(function(device){
         console.log("DEVICE READY!")
         $scope.register();
     });
+
+    var iosConfig = {
+        "badge": "true",
+        "sound": "true",
+        "alert": "true"
+    };
 
     $scope.register = function() {
          $cordovaPush.register(iosConfig).then(function(result) {
@@ -45,7 +45,8 @@ app.controller('AppCtrl', function($scope, $cordovaPush, $cordovaDialogs, ionPla
         });
     }
 
-    /** This will get called even when app is closed or in background and the user clicks on the notification.
+    /**
+     * This will get called even when app is closed or in background and the user clicks on the notification.
      * You can check the foreground field to determine how you want to handle the data. The push notification
      * will be shown regardless of application state with this code.
      */

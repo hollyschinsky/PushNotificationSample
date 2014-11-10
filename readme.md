@@ -31,3 +31,5 @@ Install the following plugins:
     $ ionic plugin add org.apache.cordova.media
     $ ionic plugin add https://github.com/phonegap-build/PushPlugin
 
+![](screenshots-blog/IMG_0009.jpg) ![](screenshots-blog/IMG_0012.jpg)
+![]('screenshots-blog/push-server.png') 
