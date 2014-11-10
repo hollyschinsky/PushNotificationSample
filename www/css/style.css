@@ -1,0 +1,10 @@
+
+textarea {
+    width: 85%;
+    height: 90px;
+    padding: 10px;
+}
+.lbl {
+    width: 10%;
+    white-space: normal;
+}
