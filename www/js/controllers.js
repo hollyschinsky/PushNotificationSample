@@ -1,16 +1,14 @@
 /**
  * Created by hollyschinsky on 11/4/14.
  */
-app.controller('AppCtrl', function($scope, $cordovaPush, $cordovaDialogs,ionPlatform) {
+app.controller('AppCtrl', function($scope, $cordovaPush, $cordovaDialogs, ionPlatform, $http) {
     var iosConfig = {
         "badge": "true",
         "sound": "true",
         "alert": "true"
     };
 
-
-    // Used ionicPlatform ready in a factory with promises to ensure it's ready here before calling register.
-    // Race condition when trying to call and set the id from app.js since this ctrl was loaded first and reg id not set yet.
+    // See ionPlatform factory in services.js for details
     ionPlatform.ready.then(function(device){
         console.log("DEVICE READY!")
         $scope.register();
@@ -21,6 +19,16 @@ app.controller('AppCtrl', function($scope, $cordovaPush, $cordovaDialogs,ionPlat
              // Success!
              console.log("Register success " + result);
              $scope.regId = result;
+             var user = {
+                 user: 'user'+Math.floor((Math.random()*10000000)+1),
+                 type: 'ios',
+                 token: result
+             }
+             console.log("Post token for registered device with data " + JSON.stringify(user));
+             $http.post('http://192.168.1.5:8000/subscribe', JSON.stringify(user)
+             ).success(function(data, status) {
+                console.log("Token stored, successfully subscribed for push notifications.");
+             }).error(function(data, status) { console.log("Error storing device token." + data + " " + status) });
 
          }, function(err) {
              // An error occurred. Show a message to the user
