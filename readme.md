@@ -16,11 +16,6 @@ The setup to use node-pushserver is discussed more below but see the npm site fo
 ![](screenshots-blog/android-statusbar-pull.png) ![](android-foreground.png) ![](screenshots-blog/android-app.png) 
 
 
-###ngCordova
-`ngCordova` is an AngularJS wrapper library for working with Cordova plugins. It's essentially a set of AngularJS directives
-to help keep your plugin code clean, organized and more maintainable. I've included the library already in the /lib folder
-but you will need to be sure all of the required plugins are installed:
-
 ### ** PRE-REQUISITES 
 
 You must install the following plugins for this app to work properly!
@@ -112,3 +107,7 @@ by [Burke Holland](https://twitter.com/burkeholland) to walk you through Apple P
 
 4-[My PushPlugin Basic Tutorial](http://devgirl.org/2013/07/17/tutorial-implement-push-notifications-in-your-phonegap-application/)
 
+###More about ngCordova
+`ngCordova` is an AngularJS wrapper library for working with Cordova plugins. It's essentially a set of AngularJS directives
+to help keep your plugin code clean, organized and more maintainable. I've included the library already in the /lib folder
+but you will need to be sure all of the required plugins are installed:
