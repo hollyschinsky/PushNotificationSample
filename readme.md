@@ -6,14 +6,14 @@ later use when a push notification needs to be broadcast to all subscribed devic
 The setup to use node-pushserver is discussed more below but see the npm site for specific setup details. 
 
 
-![](screenshots-blog/IMG_0009.jpg) ![](screenshots-blog/IMG_0012.jpg) ![](screenshots-blog/ios-swipe.png)
 
 ### Push Notification Sample on iOS
+![](screenshots-blog/IMG_0009.jpg) ![](screenshots-blog/IMG_0012.jpg) ![](screenshots-blog/ios-swipe.png)
 ![](screenshots-blog/ios-app.png) 
 
 
 ### Push Notification Sample on Android Nexus 7
-![](screenshots-blog/android-app.png) ![](screenshots-blog/android-statusbar-pull.png) ![](android-foreground.png) 
+![](screenshots-blog/android-statusbar-pull.png) ![](android-foreground.png) ![](screenshots-blog/android-app.png) 
 
 
 ###ngCordova
