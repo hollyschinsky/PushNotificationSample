@@ -1,3 +1,4 @@
+// Manual subscribe to node pushserver instance running locally
 var http = require('http');
 
 var user = {

@@ -1,64 +1,92 @@
 /**
- * Created by hollyschinsky on 11/4/14.
+ * Author: hollyschinsky
+ * twitter: @devgirfl
+ * blog: devgirl.org
+ * more tutorials: hollyschinsky.github.io
  */
-app.controller('AppCtrl', function($scope, $cordovaPush, $cordovaDialogs, $cordovaMedia, ionPlatform, $http) {
-    // See ionPlatform factory in services.js for details
-    ionPlatform.ready.then(function(device){
-        console.log("DEVICE READY!")
+app.controller('AppCtrl', function($scope, $cordovaPush, $cordovaDialogs, $cordovaMedia, $cordovaToast, ionPlatform, $http) {
+    $scope.notifications = [];
+
+    // call to register automatically upon device ready
+    ionPlatform.ready.then(function (device) {
         $scope.register();
     });
 
-    var iosConfig = {
-        "badge": "true",
-        "sound": "true",
-        "alert": "true"
-    };
 
-    $scope.register = function() {
-         $cordovaPush.register(iosConfig).then(function(result) {
-             // Success!
-             console.log("Register success " + result);
-             $scope.regId = result;
-             var user = {
-                 user: 'user'+Math.floor((Math.random()*10000000)+1), //generate a random userid
-                 type: 'ios',
-                 token: result
-             }
-             console.log("Post token for registered device with data " + JSON.stringify(user));
-             $http.post('http://192.168.1.5:8000/subscribe', JSON.stringify(user)
-             ).success(function(data, status) {
-                console.log("Token stored, successfully subscribed for push notifications.");
-             }).error(function(data, status) { console.log("Error storing device token." + data + " " + status) });
+    // Register
+    $scope.register = function () {
+        var config = null;
 
-         }, function(err) {
-             // An error occurred. Show a message to the user
-             console.log("Register error " + err)
-         });
-     }
+        if (ionic.Platform.isAndroid()) {
+            config = {
+                "senderID": "YOUR_GCM_PROJECT_ID" // REPLACE THIS WITH YOURS FROM GCM CONSOLE - also in the project URL like: https://console.developers.google.com/project/434205989073
+            };
+        }
+        else if (ionic.Platform.isIOS()) {
+            config = {
+                "badge": "true",
+                "sound": "true",
+                "alert": "true"
+            }
+        }
 
-    $scope.unregister = function() {
-        console.log("Unregister called");
-        $cordovaPush.unregister(options).then(function(result) {
-            console.log("Unregister success " + result)
-        }, function(err) {
-            console.log("Unregister error " + err)
+        $cordovaPush.register(config).then(function (result) {
+            console.log("Register success " + result);
+
+            $cordovaToast.showShortCenter('Registered for push notifications');
+            $scope.registerDisabled=true;
+            // ** NOTE: Android regid result comes back in the pushNotificationReceived, only iOS returned here
+            if (ionic.Platform.isIOS()) {
+                $scope.regId = result;
+                storeDeviceToken("ios");
+            }
+        }, function (err) {
+            console.log("Register error " + err)
         });
     }
 
-    /**
-     * This will get called even when app is closed or in background and the user clicks on the notification.
-     * You can check the foreground field to determine how you want to handle the data. The push notification
-     * will be shown regardless of application state with this code.
-     */
-    $scope.$on('pushNotificationReceived', function(event, notification) {
-        console.log("*** NOTIFIED!!! *** ");
-        console.log(JSON.stringify(['pushNotificationReceived', notification]));
+    // Notification Received
+    $scope.$on('pushNotificationReceived', function (event, notification) {
+        console.log(JSON.stringify([notification]));
+        if (ionic.Platform.isAndroid()) {
+            handleAndroid(notification);
+        }
+        else if (ionic.Platform.isIOS()) {
+            handleIOS(notification);
+            $scope.$apply(function () {
+                $scope.notifications.push(JSON.stringify(notification.alert));
+            })
+        }
+    });
 
-        // The app was already open but we'll still show the alert and sound the tone received this way...
-        if (notification.foreground=="1") {
-            // Play custom audio if a sound specified
+    // Android Notification Received Handler
+    function handleAndroid(notification) {
+        // ** NOTE: ** You could add code for when app is in foreground or not, or coming from coldstart here too
+        //             via the console fields as shown.
+        console.log("In foreground " + notification.foreground  + " Coldstart " + notification.coldstart);
+        if (notification.event == "registered") {
+            $scope.regId = notification.regid;
+            storeDeviceToken("android");
+        }
+        else if (notification.event == "message") {
+            $cordovaDialogs.alert(notification.message, "Push Notification Received");
+            $scope.$apply(function () {
+                $scope.notifications.push(JSON.stringify(notification.message));
+            })
+        }
+        else if (notification.event == "error")
+            $cordovaDialogs.alert(notification.msg, "Push notification error event");
+        else $cordovaDialogs.alert(notification.event, "Push notification handler - Unprocessed Event");
+    }
+
+    // IOS Notification Received Handler
+    function handleIOS(notification) {
+        // The app was already open but we'll still show the alert and sound the tone received this way. If you didn't check
+        // for foreground here it would make a sound twice, once when received in background and upon opening it from clicking
+        // the notification when this code runs (weird).
+        if (notification.foreground == "1") {
+            // Play custom audio if a sound specified.
             if (notification.sound) {
-                console.log("Sound file " + notification.sound);
                 var mediaSrc = $cordovaMedia.newMedia(notification.sound);
                 mediaSrc.promise.then($cordovaMedia.play(mediaSrc.media));
             }
@@ -69,39 +97,75 @@ app.controller('AppCtrl', function($scope, $cordovaPush, $cordovaDialogs, $cordo
             else $cordovaDialogs.alert(notification.alert, "Push Notification Received");
 
             if (notification.badge) {
-                console.log("Set Badge to custom # " + notification.badge);
-                $cordovaPush.setBadgeNumber(notification.badge).then(function(result) {
-                    // Success!
-                    console.log("Success " + result)
-                }, function(err) {
+                $cordovaPush.setBadgeNumber(notification.badge).then(function (result) {
+                    console.log("Set badge success " + result)
+                }, function (err) {
                     console.log("Set badge error " + err)
                 });
             }
         }
-        // Otherwise it was received in the background and reopened from the push notification so clear the badge count
-        // If you didn't hit the register button to listen for pushNotification events when app first started, this will
-        // not run until you hit it upon reopen from push notification. So you may get messages after you hit the register
-        // button (when started it from a push notification).
+        // Otherwise it was received in the background and reopened from the push notification. Badge is automatically cleared
+        // in this case. You probably wouldn't be displaying anything at this point, this is here to show that you can process
+        // the data in this situation.
         else {
-            // Could still process the data here if desired, but already received their push notification and tone and the badge
-            // was cleared automatically in this case from both alert style and banner style.
             if (notification.body && notification.messageFrom) {
-                $cordovaDialogs.alert(notification.body, "(RECEIVED) "+notification.messageFrom);
+                $cordovaDialogs.alert(notification.body, "(RECEIVED WHEN APP IN BACKGROUND) " + notification.messageFrom);
             }
-            else $cordovaDialogs.alert(notification.alert, "(RECEIVED) Push Notification Received");
+            else $cordovaDialogs.alert(notification.alert, "(RECEIVED WHEN APP IN BACKGROUND) Push Notification Received");
         }
-    });
-});
+    }
 
-/** ADDITIONAL NOTES **/
-//    var androidConfig = {
-//        "senderID":"replace_with_sender_id"
-//    };
+    // Stores the device token in a db using node-pushserver (running locally in this case)
+    //
+    // type:  Platform type (ios, android etc)
+    function storeDeviceToken(type) {
+        // Create a random userid to store with it
+        var user = { user: 'user' + Math.floor((Math.random() * 10000000) + 1), type: type, token: $scope.regId };
+        console.log("Post token for registered device with data " + JSON.stringify(user));
 
-// (optional) custom notification handler
+        $http.post('http://192.168.1.5:8000/subscribe', JSON.stringify(user))
+            .success(function (data, status) {
+                console.log("Token stored, device is successfully subscribed to receive push notifications.");
+            })
+            .error(function (data, status) {
+                console.log("Error storing device token." + data + " " + status)
+            }
+        );
+    }
+
+    // Removes the device token from the db via node-pushserver API unsubscribe (running locally in this case).
+    // If you registered the same device with different userids, *ALL* will be removed. (It's recommended to register each
+    // time the app opens which this currently does. However in many cases you will always receive the same device token as
+    // previously so multiple userids will be created with the same token unless you add code to check).
+    function removeDeviceToken() {
+        var tkn = {"token": $scope.regId};
+        $http.post('http://192.168.1.5:8000/unsubscribe', JSON.stringify(tkn))
+            .success(function (data, status) {
+                console.log("Token removed, device is successfully unsubscribed and will not receive push notifications.");
+            })
+            .error(function (data, status) {
+                console.log("Error removing device token." + data + " " + status)
+            }
+        );
+    }
+
+    // Unregister - Unregister your device token from APNS or GCM
+    // Not recommended:  See http://developer.android.com/google/gcm/adv.html#unreg-why
+    //                   and https://developer.apple.com/library/ios/documentation/UIKit/Reference/UIApplication_Class/index.html#//apple_ref/occ/instm/UIApplication/unregisterForRemoteNotifications
+    //
+    // ** Instead, just remove the device token from your db and stop sending notifications **
+    $scope.unregister = function () {
+        console.log("Unregister called");
+        removeDeviceToken();
+        $scope.registerDisabled=false;
+//        need to define options here, not sure what that needs to be
+//        $cordovaPush.unregister(options).then(function(result) {
+//            console.log("Unregister success " + result);//
+//        }, function(err) {
+//            console.log("Unregister error " + err)
+//        });
+    }
 
 
-// If you set "ecb" in the config object, the 'pushNotificationReceived' angular event will not be broadcast.
-// You will be responsible for handling the notification and passing it to your contollers/services
-//androidConfig.ecb = "myCustomOnNotificationHandler"
-//iosConfig.ecb = "myCustomOnNotificationAPNHandler"
+})
+

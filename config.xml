@@ -9,7 +9,7 @@
     </author>
   <content src="index.html"/>
   <access origin="*"/>
-  <!-- Specify an app icon -->
+  <!-- Specified a custom icon but it will not scale well, just for test to easily identify -->
   <icon src="www/img/app-icon.png"/>
   <preference name="webviewbounce" value="false"/>
   <preference name="UIWebViewBounce" value="false"/>

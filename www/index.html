@@ -10,16 +10,15 @@
     <!-- ionic/angularjs js -->
     <script src="lib/ionic/js/ionic.bundle.js"></script>
 
-      <!-- ng cordova js -->
-      <script src="lib/ng-cordova.js"></script>
+    <!-- ng cordova js -->
+    <script src="lib/ng-cordova.js"></script>
 
-      <!-- cordova script (this will be a 404 during development) -->
+    <!-- cordova script (this will be a 404 during development) -->
     <script src="cordova.js"></script>
 
     <script src="js/app.js"></script>
     <script src="js/controllers.js"></script>
     <script src="js/services.js"></script>
-
   </head>
 
   <body class="platform-ios platform-cordova platform-webview" ng-app="app" ng-controller="AppCtrl">
@@ -29,13 +28,17 @@
             <h1 class="title">Ionic Push Notification Sample</h1>
         </ion-header-bar>
         <ion-content padding="true" has-header="true">
-            <button class="button button-full button-balanced" ng-click="register()">Register for Push Notifications</button>
-            <div class="padding-top">
-                <label class="item item-input">
-                    <span class="input-label lbl">Registration Result</span>
-                    <textarea readonly>{{regId}}</textarea>
-                </label>
+            <div class="text-center padding">
+                <button ng-disabled="registerDisabled" class="button button-bar-inline button-balanced" ng-click="register()">Register</button>
+                <button ng-disabled="!registerDisabled" class="button button-bar-inline button-balanced" ng-click="unregister()">Unregister</button>
             </div>
+            <p>Device Token</p>
+            <textarea readonly>{{regId}}</textarea>
+            <ion-list>
+                <ion-item ng-repeat="notification in notifications track by $index" type="item-content">
+                    {{notification}}
+                </ion-item>
+            </ion-list>
         </ion-content>
     </ion-pane>
 
