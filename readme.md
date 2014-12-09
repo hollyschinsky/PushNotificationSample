@@ -111,3 +111,26 @@ by [Burke Holland](https://twitter.com/burkeholland) to walk you through Apple P
 `ngCordova` is an AngularJS wrapper library for working with Cordova plugins. It's essentially a set of AngularJS directives
 to help keep your plugin code clean, organized and more maintainable. I've included the library already in the /lib folder
 but you will need to be sure all of the required plugins are installed:
+
+####Miscellaneous/Setup Notes####
+
+1-Run mongo
+    $ mongod
+    $ sudo mongod
+
+2-Run pushserver
+    $ pushserver -c config.json
+    
+3-If running on localhost, ensure you use the raw ip address of your network in the controllers.js (192.168.1.*) unless you 
+have some other way to map your localhost name.
+
+** Need to refresh your browser to get the new users/tokens to load if you don't default to all
+
+####Feedback Service
+- Register, refresh browser and send to it (either try to all or just that device)
+- Delete the app
+- Stop pushserver and restart 
+- Try sending to same device token again
+
+- Push to same device token from before
+
