@@ -20,12 +20,12 @@ The setup to use node-pushserver is discussed more below but see the npm site fo
 
 You must install the following plugins for this app to work properly:
 
+- [PushPlugin](https://github.com/phonegap-build/PushPlugin)
 - console
 - device
 - dialogs
 - media
 - file
-- [PushPlugin](https://github.com/phonegap-build/PushPlugin)
 - [ToastPlugin](https://github.com/EddyVerbruggen/Toast-PhoneGap-Plugin) 
 
 
@@ -45,7 +45,7 @@ A couple options are included for sending push notifications to this application
 from different platforms and send in bulk, or if you just want to test sending one simple message, there are two simple node services included
 to do that as well (node-apn and node-gcm). 
 
-### Sending to Multiple Devices And Storing Tokens (better approach)
+### Send to Multiple Devices and Store Tokens (better approach)
 ####node-pushserver 
 Check out [node-pushserver](https://www.npmjs.org/package/node-pushserver) to manage push notifications and device tokens with [mongodb](www.mongodb.org) database. This sample includes a subscribe.js file
 sample node/express service which can be used to subscribe a user for push notifications from the app. You can then send push notifications
@@ -133,6 +133,13 @@ have some other way to map your localhost name.
 
 4-If you think all is setup right but don't receive notifications on your Android device, ensure you're using an API credentials key in your service that is associated with the GCM project id
 you specific in controllers.js. 
+
+**iOS Sample Message Payload** 
+
+[{"badge":"0","sound":"soundName","alert":"Jennifer L liked your photo","foreground":"0"}]
+
+**Android Sample Message Payload**
+[{"message":"Tori432 commented on your photo: Awesome!","payload":{"message":"Tori432 commented on your photo: Awesome!"},"collapse_key":"optional","from":"824841663931","foreground":true,"event":"message"}]"
 
 ###Unregistering - When a user deletes/uninstalls your app
 In the sample app you will see that the local `unregister` method is simply removing the device token from the database, not calling the `unregister()`
