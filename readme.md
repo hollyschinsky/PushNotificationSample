@@ -146,8 +146,8 @@ In the sample app you will see that the local `unregister` method is simply remo
  method in the PushPlugin. Please read the following links to get the details about why this is recommended, followed by some more details regarding
  invalid token handling for each platform:
 
--[Android Unregister](http://developer.android.com/google/gcm/adv.html#unreg-why)
--[Apple Unregister](https://developer.apple.com/library/ios/documentation/UIKit/Reference/UIApplication_Class/index.html#//apple_ref/occ/instm/UIApplication/unregisterForRemoteNotifications) 
+1.[Android Unregister](http://developer.android.com/google/gcm/adv.html#unreg-why)
+1.[Apple Unregister](https://developer.apple.com/library/ios/documentation/UIKit/Reference/UIApplication_Class/index.html#//apple_ref/occ/instm/UIApplication/unregisterForRemoteNotifications) 
  
 ###Removing device tokens from your 3rd party server
 So how do you determine when to remove a device token from your own 3rd party server so you don't have unnecessary overhead? The two services
