@@ -18,7 +18,7 @@ The setup to use node-pushserver is discussed more below but see the npm site fo
 
 ### ** PRE-REQUISITES 
 
-You must install the following plugins for this app to work properly!
+You must install the following plugins for this app to work properly:
 
 - console
 - device
@@ -36,6 +36,8 @@ You must install the following plugins for this app to work properly!
         $ ionic plugin add org.apache.cordova.media
         $ ionic plugin add https://github.com/phonegap-build/PushPlugin
         $ ionic plugin add https://github.com/EddyVerbruggen/Toast-PhoneGap-Plugin.git
+
+
 
 ## Sending Push Notifications to your App
 
@@ -115,22 +117,48 @@ but you will need to be sure all of the required plugins are installed:
 ####Miscellaneous/Setup Notes####
 
 1-Run mongo
-    $ mongod
-    $ sudo mongod
-
-2-Run pushserver
-    $ pushserver -c config.json
+    `$ mongod`
     
-3-If running on localhost, ensure you use the raw ip address of your network in the controllers.js (192.168.1.*) unless you 
+    or 
+     `$ sudo mongod`
+
+2-Run [pushserver](https://www.npmjs.org/package/node-pushserver)
+
+    `$ pushserver -c config.json`
+    
+3-If running from localhost, ensure you're use the raw ip address of your network in the controllers.js (192.168.1.*) unless you 
 have some other way to map your localhost name.
 
-** Need to refresh your browser to get the new users/tokens to load if you don't default to all
+** You'll need to refresh your browser to get the new users/tokens to load if you don't default to all before sending a message.
 
-####Feedback Service
-- Register, refresh browser and send to it (either try to all or just that device)
-- Delete the app
-- Stop pushserver and restart 
-- Try sending to same device token again
+4-If you think all is setup right but don't receive notifications on your Android device, ensure you're using an API credentials key in your service that is associated with the GCM project id
+you specific in controllers.js. 
 
-- Push to same device token from before
+###Unregistering - When a user deletes/uninstalls your app
+In the sample app you will see that the local `unregister` method is simply removing the device token from the database, not calling the `unregister()`
+ method in the PushPlugin. Please read the following links to get the details about why this is recommended, followed by some more details regarding
+ invalid token handling for each platform:
+
+[Android Unregister](http://developer.android.com/google/gcm/adv.html#unreg-why)
+[Apple Unregister](https://developer.apple.com/library/ios/documentation/UIKit/Reference/UIApplication_Class/index.html#//apple_ref/occ/instm/UIApplication/unregisterForRemoteNotifications) 
+ 
+###Removing device tokens from your 3rd party server
+So how do you determine when to remove a device token from your own 3rd party server so you don't have unnecessary overhead? The two services
+handle it differently, below are some details and further links to check out:
+
+**GCM Handling**
+
+Google notes that 'When users uninstall an application, it is not automatically unregistered on GCM. It is only unregistered when the GCM server tries to send a message to the device and the device answers that the application is uninstalled or it does not have a broadcast receiver configured to receive com.google.android.c2dm.intent.RECEIVE intents. 
+At that point, your server should mark the device as unregistered (the server will receive a NotRegistered error).'
+
+See [this link](http://developer.android.com/google/gcm/adv.html) for advanced concepts and other useful information surrounding this. 
+
+**Apple's Feedback Service**
+APNs provides a useful [Feedback Service](https://developer.apple.com/library/ios/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/Chapters/CommunicatingWIthAPS.html#//apple_ref/doc/uid/TP40008194-CH101-SW3) 
+that can be queried to find any device tokens that are no longer valid, for instance if the user deleted your app from their device. Apple recommends
+you query the service once per day to find any invalid tokens and remove them from your own database to reduce unnecessary message overhead and improve overall system performance. 
+
+The [pushserver](https://www.npmjs.org/package/node-pushserver) library also has an interface built into it for accessing this service 
+that you can take advantage of. It is also configured via the config.json file. If a device token is found to be invalid, it should be
+reported in the terminal window where pushserver is running. 
 
