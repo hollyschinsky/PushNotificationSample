@@ -5,6 +5,7 @@ and Android. Once the device registration token is received, it is sent to a loc
 later use when a push notification needs to be broadcast to all subscribed devices using [node-pushserver](https://www.npmjs.org/package/node-pushserver). 
 The setup to use node-pushserver is discussed more below but see the npm site for specific setup details. 
 
+#### ** See [related blog post](http://devgirl.org/2014/12/16/push-notifications-sample-app-with-ionic-and-ngcordova/) for more details!
 
 
 ### Push Notification Sample on iOS
