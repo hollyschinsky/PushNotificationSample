@@ -95,7 +95,7 @@ instance.
 
 ####Resources - HIGHLY RECOMMENDED REFERENCES
 
-The answers to your questions about Apple Push Notifications and Google Cloud Messaging configuration will be found in these previous 
+The answers to your questions about [Apple Push Notifications](https://developer.apple.com/library/ios/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/Chapters/ApplePushService.html#//apple_ref/doc/uid/TP40008194-CH100-SW9) and [Google Cloud Messaging](http://developer.android.com/google/gcm/gs.html) configuration can be found in my previous 
 posts. If you're not familiar with the setup, you will save yourself headache at least reading thru the configuration portion
 for each. You will need certain resources from them and have to specifically enable your iOS for Push Notifications thru the Apple
 Developer site. 
