@@ -46,7 +46,7 @@ app.controller('AppCtrl', function($scope, $cordovaPush, $cordovaDialogs, $cordo
     }
 
     // Notification Received
-    $scope.$on('pushNotificationReceived', function (event, notification) {
+    $scope.$on('$cordovaPush:notificationReceived', function (event, notification) {
         console.log(JSON.stringify([notification]));
         if (ionic.Platform.isAndroid()) {
             handleAndroid(notification);
