@@ -1,6 +1,6 @@
 /**
  * Author: hollyschinsky
- * twitter: @devgirfl
+ * twitter: @devgirlfl
  * blog: devgirl.org
  * more tutorials: hollyschinsky.github.io
  */
