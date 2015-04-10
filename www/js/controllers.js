@@ -9,7 +9,12 @@ app.controller('AppCtrl', function($scope, $cordovaPush, $cordovaDialogs, $cordo
 
     // call to register automatically upon device ready
     ionPlatform.ready.then(function (device) {
-        $scope.register();
+        if (window.localStorage['regid'] !== "true") {
+                $scope.register();
+                console.log("regid is not true so registering the device for push notification");
+            } else {
+                console.log("regid is true so need for registering");
+            }
     });
 
 
@@ -126,9 +131,12 @@ app.controller('AppCtrl', function($scope, $cordovaPush, $cordovaDialogs, $cordo
         $http.post('http://192.168.1.16:8000/subscribe', JSON.stringify(user))
             .success(function (data, status) {
                 console.log("Token stored, device is successfully subscribed to receive push notifications.");
+                
+                window.localStorage['regid'] = true;
             })
             .error(function (data, status) {
                 console.log("Error storing device token." + data + " " + status)
+                $cordovaToast.showLongBottom('The app is unable to register for push notification, try again later by repopening the app');
             }
         );
     }
