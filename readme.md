@@ -137,10 +137,33 @@ you specific in controllers.js.
 
 **iOS Sample Message Payload** 
 
-[{"badge":"0","sound":"soundName","alert":"Jennifer L liked your photo","foreground":"0"}]
+```json
+[
+  {
+    "badge": "0",
+    "sound": "soundName",
+    "alert": "Jennifer L liked your photo",
+    "foreground":"0"
+  }
+]
+```
 
 **Android Sample Message Payload**
-[{"message":"Tori432 commented on your photo: Awesome!","payload":{"message":"Tori432 commented on your photo: Awesome!"},"collapse_key":"optional","from":"824841663931","foreground":true,"event":"message"}]"
+
+```json
+[
+  {
+    "message": "Tori432 commented on your photo: Awesome!",
+    "payload": {
+        "message":"Tori432 commented on your photo: Awesome!"
+    },
+    "collapse_key" :"optional",
+    "from": "824841663931",
+    "foreground": true,
+    "event": "message"
+    }
+]
+```
 
 ###Unregistering - When a user deletes/uninstalls your app
 In the sample app you will see that the local `unregister` method is simply removing the device token from the database, not calling the `unregister()`
