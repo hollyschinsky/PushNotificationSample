@@ -47,7 +47,7 @@ from different platforms and send in bulk, or if you just want to test sending o
 to do that as well (node-apn and node-gcm). 
 
 ### Send to Multiple Devices and Store Tokens (better approach)
-####node-pushserver 
+#### node-pushserver 
 Check out [node-pushserver](https://www.npmjs.org/package/node-pushserver) to manage push notifications and device tokens with [mongodb](www.mongodb.org) database. This sample includes a subscribe.js file
 sample node/express service which can be used to subscribe a user for push notifications from the app. You can then send push notifications
 from your the web browser easily and quickly using their UI as shown here. 
@@ -75,26 +75,26 @@ setup. If you're running your node-pushserver instance from localhost, you may h
 *The app is currently setup to receive push notifications from this approach as well. You just need to update the sendMsg.js or sendGCM.js files
  to use your device tokens and certificates as needed.*
 
-#####iOS (APNS) Simple Node Service to send push notifications
+##### iOS (APNS) Simple Node Service to send push notifications
 I've also included a node service example called sendMsg.js for sending push notifications using the [node-apn](https://github.com/argon/node-apn)
 library to your iOS devices. Run this manually with your own configuration from node.
 
   `$ node sendMsg.js`
  
-#####Android (GCM) node-gcm Simple Node Service to send push notifications
+##### Android (GCM) node-gcm Simple Node Service to send push notifications
 This sample also includes a node service example called sendGCM.js for sending push notifications using the [node-gcm](https://github.com/ToothlessGear/node-gcm)
 library to your Android devices. 
   
   `$ node sendGCM.js`
 
-#####Extra
+##### Extra
 *subscribe.js* is yet another node service that can be used to manually add a user and token into your locally running node-pushserver instance
 instance.
   
   `$ node subscribe.js`
 
 
-####Resources - HIGHLY RECOMMENDED REFERENCES
+#### Resources - HIGHLY RECOMMENDED REFERENCES
 
 The answers to your questions about [Apple Push Notifications](https://developer.apple.com/library/ios/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/Chapters/ApplePushService.html#//apple_ref/doc/uid/TP40008194-CH100-SW9) and [Google Cloud Messaging](http://developer.android.com/google/gcm/gs.html) configuration can be found in my previous 
 posts. If you're not familiar with the setup, you will save yourself headache at least reading thru the configuration portion
@@ -110,12 +110,12 @@ by [Burke Holland](https://twitter.com/burkeholland) to walk you through Apple P
 
 4-[My PushPlugin Basic Tutorial](http://devgirl.org/2013/07/17/tutorial-implement-push-notifications-in-your-phonegap-application/)
 
-###More about ngCordova
+### More about ngCordova
 `ngCordova` is an AngularJS wrapper library for working with Cordova plugins. It's essentially a set of AngularJS directives
 to help keep your plugin code clean, organized and more maintainable. I've included the library already in the /lib folder
 but you will need to be sure all of the required plugins are installed:
 
-####Miscellaneous/Setup Notes####
+#### Miscellaneous/Setup Notes ####
 
 1-Run mongo
     `$ mongod`
@@ -142,7 +142,7 @@ you specific in controllers.js.
 **Android Sample Message Payload**
 [{"message":"Tori432 commented on your photo: Awesome!","payload":{"message":"Tori432 commented on your photo: Awesome!"},"collapse_key":"optional","from":"824841663931","foreground":true,"event":"message"}]"
 
-###Unregistering - When a user deletes/uninstalls your app
+### Unregistering - When a user deletes/uninstalls your app
 In the sample app you will see that the local `unregister` method is simply removing the device token from the database, not calling the `unregister()`
  method in the PushPlugin. Please read the following links to get the details about why this is recommended, followed by some more details regarding
  invalid token handling for each platform:
@@ -150,7 +150,7 @@ In the sample app you will see that the local `unregister` method is simply remo
 - [Android Unregister](http://developer.android.com/google/gcm/adv.html#unreg-why)
 - [Apple Unregister](https://developer.apple.com/library/ios/documentation/UIKit/Reference/UIApplication_Class/index.html#//apple_ref/occ/instm/UIApplication/unregisterForRemoteNotifications) 
  
-###Removing device tokens from your 3rd party server
+### Removing device tokens from your 3rd party server
 So how do you determine when to remove a device token from your own 3rd party server so you don't have unnecessary overhead? The two services
 handle it differently, below are some details and further links to check out:
 
